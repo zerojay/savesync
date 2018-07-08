@@ -2,25 +2,18 @@
 
 owncloudver=$(owncloudcmd -v | cut -d " " -f 3)
 
-if [ ! -e "/usr/local/bin/owncloudcmd" ]
+if [ ! -e "/usr/bin/owncloudcmd" ]
 then
 
 
-read -p "OWNCOUD NOT FOUND, COMPLE IT FROM SOURCE? This will take a while.... y/n? " -n 1 -r
+read -p "owncloudcmd not found, install it from repository? " -n 1 -r
 echo    # (optional) move to a new line
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
 fi
 
-echo "**** Downloading dependencies ****"
-ocbuild/dependencies.sh;
-
-echo "**** Starting Build process ****"
-ocbuild/oc-build.sh;
-
-echo "**** Installing owncloudclient ****"
-sudo ocbuild/install.sh;
+apt install owncloud-client-cmd
 
 fi
 
@@ -59,7 +52,7 @@ done
 
 echo "************CAUTION************";
 
-echo "THE DIRECTORY " $owncloud "MUST BE CREATED ON THE SERVER"; 
+echo "The " $owncloud " directory must already exist on the server. If it does not, please create it on your OwnCloud installation manually."; 
 echo
 echo "THIS CONFIGURATION WILL OVERWRITE YOUR RUNCOMMAND-ONSTART AND ONEND";
 
