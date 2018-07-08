@@ -53,8 +53,6 @@ done
 echo "************CAUTION************";
 
 echo "The " $owncloud " directory must already exist on the server. If it does not, please create it on your OwnCloud installation manually."; 
-echo
-echo "THIS CONFIGURATION WILL OVERWRITE YOUR RUNCOMMAND-ONSTART AND ONEND";
 
 read -p "continue y/n? " -n 1 -r
 echo    # (optional) move to a new line
@@ -133,8 +131,19 @@ done
 
 echo "creating Runcommands"
 
-cp runcommand /opt/retropie/configs/all/runcommand-onstart.sh;
-cp runcommand /opt/retropie/configs/all/runcommand-onend.sh;
+echo "# OwnCloudSync">>/opt/retropie/configs/all/runcommand-onstart.sh
+echo "# OwnCloudSync">>/opt/retropie/configs/all/runcommand-onend.sh
+echo location=$(cat $HOME/.savesync/saveconfig | grep location | cut -d "=" -f 2);>>/opt/retropie/configs/all/runcommand-onstart.sh
+echo location=$(cat $HOME/.savesync/saveconfig | grep location | cut -d "=" -f 2);>>/opt/retropie/configs/all/runcommand-onend.sh
+echo owncloud=$(cat $HOME/.savesync/saveconfig | grep owncloud | cut -d "=" -f 2);>>/opt/retropie/configs/all/runcommand-onstart.sh
+echo owncloud=$(cat $HOME/.savesync/saveconfig | grep owncloud | cut -d "=" -f 2);>>/opt/retropie/configs/all/runcommand-onend.sh
+echo user=$(cat $HOME/.savesync/saveconfig | grep user | cut -d "=" -f 2);>>/opt/retropie/configs/all/runcommand-onstart.sh
+echo user=$(cat $HOME/.savesync/saveconfig | grep user | cut -d "=" -f 2);>>/opt/retropie/configs/all/runcommand-onend.sh
+echo password=$(cat $HOME/.savesync/saveconfig | grep password | cut -d "=" -f 2);>>/opt/retropie/configs/all/runcommand-onstart.sh
+echo password=$(cat $HOME/.savesync/saveconfig | grep password | cut -d "=" -f 2);>>/opt/retropie/configs/all/runcommand-onend.sh
+
+echo owncloudcmd -s -u $user -p $password $location/$1 $owncloud/$1>>/opt/retropie/configs/all/runcommand-onstart.sh
+echo owncloudcmd -s -u $user -p $password $location/$1 $owncloud/$1>>/opt/retropie/configs/all/runcommand-onend.sh
 
 cp runcommand $HOME/.savesync/runcommand
 
